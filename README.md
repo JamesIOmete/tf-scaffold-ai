@@ -154,6 +154,9 @@ pytest tests/ -v
 
 ## Related projects
 
-- [multicloud-sa-toolkit](https://github.com/JamesIOmete/multicloud-sa-toolkit)
-- [tf-plan-ai-reviewer](https://github.com/JamesIOmete/tf-plan-ai-reviewer)
-- [multicloud-estate-briefing](https://github.com/JamesIOmete/multicloud-estate-briefing)
+- [multicloud-sa-toolkit](https://github.com/JamesIOmete/multicloud-sa-toolkit)** — the multi-cloud Terraform toolkit this scaffold targets; use UC01–UC05 patterns as the architectural baseline for generated scaffolds.
+- [tf-plan-ai-reviewer](https://github.com/JamesIOmete/tf-plan-ai-reviewer)** — AI review of Terraform plan output; the natural downstream complement to this generator — scaffold here, review there.
+- [multicloud-estate-briefing](https://github.com/JamesIOmete/multicloud-estate-briefing)** — LLM-powered estate briefing from inventory artifacts; completes the AI-augmented IaC lifecycle: generate → review → monitor.
+- [iot-ops-agent](https://github.com/JamesIOmete/iot-ops-agent)** — autonomous AI agent for IoT fleet operations; demonstrates a more advanced agentic pattern beyond single-pass LLM generation.
+- [aws-iot-edge-reference](https://github.com/JamesIOmete/aws-iot-edge-reference)** — end-to-end AWS IoT reference stack; example of the kind of architecture this scaffold tool can generate a starting point for.
+
