@@ -18,10 +18,34 @@ inputs:
     description: 'Workspace-relative path to write the generated scaffold'
     required: false
     default: 'out/scaffold'
-  openai-api-key:
-    description: 'OpenAI API key (mutually exclusive with azure-openai-* inputs)'
+
+  # ---------------------------------------------------------------------------
+  # Anthropic (Claude) — takes priority if anthropic-api-key is set
+  # ---------------------------------------------------------------------------
+  anthropic-api-key:
+    description: 'Anthropic API key. Takes priority over OpenAI and Azure if set.'
     required: false
     default: ''
+  anthropic-model:
+    description: 'Anthropic model name'
+    required: false
+    default: 'claude-sonnet-4-6'
+
+  # ---------------------------------------------------------------------------
+  # OpenAI
+  # ---------------------------------------------------------------------------
+  openai-api-key:
+    description: 'OpenAI API key (mutually exclusive with anthropic-* and azure-openai-* inputs)'
+    required: false
+    default: ''
+  model:
+    description: 'OpenAI model name'
+    required: false
+    default: 'gpt-4o'
+
+  # ---------------------------------------------------------------------------
+  # Azure OpenAI
+  # ---------------------------------------------------------------------------
   azure-openai-endpoint:
     description: 'Azure OpenAI endpoint URL'
     required: false
@@ -34,10 +58,10 @@ inputs:
     description: 'Azure OpenAI deployment name'
     required: false
     default: 'gpt-4o'
-  model:
-    description: 'OpenAI model name'
-    required: false
-    default: 'gpt-4o'
+
+  # ---------------------------------------------------------------------------
+  # GitHub
+  # ---------------------------------------------------------------------------
   github-token:
     description: 'GitHub token (used to post scaffold summary as workflow summary)'
     required: true
@@ -64,11 +88,13 @@ runs:
         --output "$GITHUB_WORKSPACE/${{ inputs.output-path }}"
       working-directory: ${{ github.action_path }}
       env:
-        OPENAI_API_KEY: ${{ inputs.openai-api-key }}
-        AZURE_OPENAI_ENDPOINT: ${{ inputs.azure-openai-endpoint }}
-        AZURE_OPENAI_KEY: ${{ inputs.azure-openai-key }}
-        AZURE_OPENAI_DEPLOYMENT: ${{ inputs.azure-openai-deployment }}
-        MODEL: ${{ inputs.model }}
+        ANTHROPIC_API_KEY:        ${{ inputs.anthropic-api-key }}
+        ANTHROPIC_MODEL:          ${{ inputs.anthropic-model }}
+        OPENAI_API_KEY:           ${{ inputs.openai-api-key }}
+        AZURE_OPENAI_ENDPOINT:    ${{ inputs.azure-openai-endpoint }}
+        AZURE_OPENAI_KEY:         ${{ inputs.azure-openai-key }}
+        AZURE_OPENAI_DEPLOYMENT:  ${{ inputs.azure-openai-deployment }}
+        MODEL:                    ${{ inputs.model }}
 
     - name: Upload scaffold as artifact
       uses: actions/upload-artifact@v4

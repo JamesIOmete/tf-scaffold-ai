@@ -2,6 +2,8 @@
 
 A GitHub Actions composite action (and CLI tool) that takes a **plain-language description** of a desired cloud architecture and generates a working **Terraform scaffold** — structured into modules, with variables, outputs, and least-privilege defaults baked in.
 
+Supports **Anthropic Claude** (default, recommended), **OpenAI**, and **Azure OpenAI** — configure by passing the appropriate API key.
+
 Built as the third project in a portfolio demonstrating AI-augmented infrastructure tooling. See also:
 - [multicloud-sa-toolkit](https://github.com/JamesIOmete/multicloud-sa-toolkit) — the multi-cloud Terraform toolkit this scaffold tool targets
 - [tf-plan-ai-reviewer](https://github.com/JamesIOmete/tf-plan-ai-reviewer) — AI review of Terraform plan output
@@ -16,7 +18,7 @@ flowchart TD
     USER["User: plain-language architecture description"]
     VALIDATOR["scaffolder/validator.py\nintent check, prompt-injection defence, arch guardrails"]
     PROMPT["scaffolder/prompt.py\nbuilds structured LLM prompt with IaC standards baked in"]
-    LLM["scaffolder/llm.py\ncalls OpenAI or Azure OpenAI"]
+    LLM["scaffolder/llm.py\ncalls Anthropic Claude, OpenAI, or Azure OpenAI"]
     PARSER["scaffolder/parser.py\nparses FILE blocks from LLM response"]
     WRITER["scaffolder/writer.py\nwrites .tf files to output directory"]
     OUT["out/scaffold/"]
@@ -73,7 +75,7 @@ jobs:
             with an IAM role scoped to S3 read-only on a named bucket.
             All resources tagged for production.
           cloud: aws
-          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Use scaffold
@@ -106,6 +108,49 @@ python -m scaffolder.scaffold \
 
 ---
 
+## Provider examples
+
+### Anthropic Claude (default, recommended)
+
+```yaml
+- uses: JamesIOmete/tf-scaffold-ai@v1
+  with:
+    description: "A VPC with two private subnets and an EC2 instance"
+    cloud: aws
+    anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+    anthropic-model: claude-sonnet-4-6
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### OpenAI
+
+```yaml
+- uses: JamesIOmete/tf-scaffold-ai@v1
+  with:
+    description: "A VPC with two private subnets and an EC2 instance"
+    cloud: aws
+    openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+    model: gpt-4o
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### Azure OpenAI
+
+```yaml
+- uses: JamesIOmete/tf-scaffold-ai@v1
+  with:
+    description: "A VPC with two private subnets and an EC2 instance"
+    cloud: aws
+    azure-openai-endpoint: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+    azure-openai-key: ${{ secrets.AZURE_OPENAI_KEY }}
+    azure-openai-deployment: gpt-4o
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+**Provider selection:** Anthropic is used if `anthropic-api-key` is set. Azure OpenAI is used if `azure-openai-endpoint` is set. Otherwise OpenAI is used. Only one provider key is required.
+
+---
+
 ## Multi-cloud output
 
 Pass `--cloud multi` (or `cloud: multi` in the action) to generate parallel scaffolds for AWS, Azure, and GCP. The output is structured as:
@@ -132,7 +177,7 @@ out/scaffold/
 | Structured LLM prompting with IaC domain constraints | `scaffolder/prompt.py` |
 | Pre-LLM input validation and prompt-injection defense | `scaffolder/validator.py` |
 | LLM response parsing (structured FILE blocks with fallback) | `scaffolder/parser.py` |
-| OpenAI / Azure OpenAI dual-provider support | `scaffolder/llm.py` |
+| Anthropic / OpenAI / Azure OpenAI multi-provider support | `scaffolder/llm.py` |
 | AI-generated code written to disk as an artifact | `scaffolder/writer.py` |
 
 ---
