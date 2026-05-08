@@ -1,5 +1,7 @@
 # tf-scaffold-ai
 
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-Terraform%20Scaffold%20AI-purple?logo=github)](https://github.com/marketplace/actions/terraform-scaffold-ai)
+
 A GitHub Actions composite action (and CLI tool) that takes a **plain-language description** of a desired cloud architecture and generates a working **Terraform scaffold** — structured into modules, with variables, outputs, and least-privilege defaults baked in.
 
 Supports **Anthropic Claude** (default, recommended), **OpenAI**, and **Azure OpenAI** — configure by passing the appropriate API key.
