@@ -11,26 +11,20 @@ Built as the third project in a portfolio demonstrating AI-augmented infrastruct
 
 ## How it works
 
+```mermaid
+flowchart TD
+    USER["User: plain-language architecture description"]
+    VALIDATOR["scaffolder/validator.py\nintent check, prompt-injection defence, arch guardrails"]
+    PROMPT["scaffolder/prompt.py\nbuilds structured LLM prompt with IaC standards baked in"]
+    LLM["scaffolder/llm.py\ncalls OpenAI or Azure OpenAI"]
+    PARSER["scaffolder/parser.py\nparses FILE blocks from LLM response"]
+    WRITER["scaffolder/writer.py\nwrites .tf files to output directory"]
+    OUT["out/scaffold/"]
+
+    USER --> VALIDATOR --> PROMPT --> LLM --> PARSER --> WRITER --> OUT
 ```
-User: "Give me a VPC with two private subnets, a NAT gateway,
-       and an EC2 instance with an IAM role scoped to S3 read-only."
-        │
-        ▼
-scaffolder/validator.py   ← intent check, prompt-injection defence, arch guardrails
-        │
-        ▼
-scaffolder/prompt.py      ← builds structured LLM prompt with IaC standards baked in
-        │
-        ▼
-scaffolder/llm.py         ← calls OpenAI or Azure OpenAI
-        │
-        ▼
-scaffolder/parser.py      ← parses FILE blocks from LLM response
-        │
-        ▼
-scaffolder/writer.py      ← writes .tf files to output directory
-        │
-        ▼
+
+```
 out/scaffold/
   ├── versions.tf
   ├── variables.tf
