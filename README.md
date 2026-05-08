@@ -36,7 +36,7 @@ out/scaffold/
 
 ## What makes it different from the other two projects
 
-The other two projects are **downstream analytical tools** — they operate on infrastructure artefacts that already exist (a plan JSON, an inventory JSON). This project is **generative and upstream**: it creates the infrastructure code itself from nothing.
+The other two projects are **downstream analytical tools** — they operate on infrastructure artifacts that already exist (a plan JSON, an inventory JSON). This project is **generative and upstream**: it generates Terraform code from only a plain-language description.
 
 The key engineering challenge is not just generation — it is **constrained generation**: the LLM must produce code that follows security and architectural best practices by default, even if the user's description doesn't ask for them.
 
@@ -47,7 +47,7 @@ The key engineering challenge is not just generation — it is **constrained gen
 Before the LLM is called, two validation layers run on the user's description:
 
 1. **Intent validation** — rejects off-topic, too-vague, or nonsensical inputs and asks the user to revise.
-2. **Prompt-injection defence** — detects attempts to hijack the system prompt and blocks them with an informative error.
+2. **Prompt-injection defense** — detects attempts to hijack the system prompt and blocks them with an informative error.
 
 Architectural anti-patterns (wide-open CIDRs, wildcard IAM, disabled encryption) are surfaced as **warnings** rather than hard errors, and the system prompt instructs the LLM to apply safe defaults regardless.
 
@@ -130,7 +130,7 @@ out/scaffold/
 | Concept | Where |
 |---------|-------|
 | Structured LLM prompting with IaC domain constraints | `scaffolder/prompt.py` |
-| Pre-LLM input validation and prompt-injection defence | `scaffolder/validator.py` |
+| Pre-LLM input validation and prompt-injection defense | `scaffolder/validator.py` |
 | LLM response parsing (structured FILE blocks with fallback) | `scaffolder/parser.py` |
 | OpenAI / Azure OpenAI dual-provider support | `scaffolder/llm.py` |
 | AI-generated code written to disk as an artifact | `scaffolder/writer.py` |
